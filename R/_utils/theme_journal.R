@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # File:     R/_utils/theme_journal.R
 # Purpose:  Shared figure aesthetics for the project — a small, opinionated
-#           palette + ggplot2 theme that reads as Nature / Science / Cell rather
+#           palette + ggplot2 theme that reads as Nature / Science / Lancet rather
 #           than "default ggplot blue and red". Every figure in production R/
 #           and in explorations/ should source this and use the helpers below.
 # Usage:

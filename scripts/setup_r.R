@@ -37,7 +37,6 @@ REQUIRED_PKGS <- c(
 
   # --- survival analysis -----------------------------------------------------
   "survival",                     # Cox PH (coxph), Surv(), survfit() — also ships with R
-  "survminer",                    # ggsurvplot, ggforest
 
   # --- publication output ----------------------------------------------------
   "modelsummary", "kableExtra",   # tables (.tex, .csv, .html)

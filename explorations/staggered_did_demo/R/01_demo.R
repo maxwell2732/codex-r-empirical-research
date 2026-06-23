@@ -15,7 +15,7 @@
 # Outputs:  output/figures/event_study_comparison.{pdf,png}
 #           output/figures/data_visualisation.{pdf,png}
 #           output/tables/pooled_att_comparison.{tex,csv}
-# Log:      logs/explorations_staggered_did_demo_R_01_demo.log
+# Log:      explorations/staggered_did_demo/logs/01_demo.log
 # ------------------------------------------------------------------------------
 
 if (getRversion() < "4.3.0") stop("Requires R >= 4.3.0; you have ", R.version.string)
@@ -24,7 +24,16 @@ options(warn = 1, scipen = 999, stringsAsFactors = FALSE)
 source("R/_utils/paths.R")
 source("R/_utils/logging.R")
 source("R/_utils/theme_journal.R")
-start_log("explorations_staggered_did_demo_R_01_demo")
+
+demo_dir <- proj_path("explorations", "staggered_did_demo")
+log_dir <- file.path(demo_dir, "logs")
+fig_dir <- file.path(demo_dir, "output", "figures")
+tab_dir <- file.path(demo_dir, "output", "tables")
+dir.create(log_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(tab_dir, recursive = TRUE, showWarnings = FALSE)
+
+start_log("01_demo", dir = log_dir)
 on.exit(stop_log(), add = TRUE)
 
 set.seed(20260512)
@@ -337,7 +346,8 @@ p_es <- ggplot(es_long, aes(x = e, y = estimate, colour = estimator)) +
   scale_colour_manual(values = est_palette, name = "Estimator") +
   scale_x_continuous(breaks = -2:5) +
   labs(title    = "Event-study estimates vs truth",
-       subtitle = "Dashed black line + black dots = true ATT(e); coloured points = estimator with 95% CI",
+       subtitle = paste("Dashed black line + black dots = true ATT(e);",
+                        "coloured points = estimator with 95% CI"),
        x        = "Event time (periods relative to treatment)",
        y        = "Estimated ATT(e)",
        caption  = "Source: simulated panel (N = 600, T = 10).") +
@@ -410,8 +420,7 @@ cat("\n*** Pooled-ATT comparison ***\n")
 print(pooled_tbl)
 
 write.csv(pooled_tbl,
-          proj_path("explorations", "staggered_did_demo", "output", "tables",
-                    "pooled_att_comparison.csv"),
+          file.path(tab_dir, "pooled_att_comparison.csv"),
           row.names = FALSE)
 
 # A modelsummary-rendered LaTeX table grouping the heterogeneity-robust models
@@ -422,8 +431,7 @@ ms_models <- list("TWFE (naive)" = m_twfe_pooled,
 
 modelsummary(
   ms_models,
-  output = proj_path("explorations", "staggered_did_demo", "output", "tables",
-                     "pooled_att_comparison.tex"),
+  output = file.path(tab_dir, "pooled_att_comparison.tex"),
   stars  = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
   fmt    = 3,
   gof_omit = "AIC|BIC|Log.Lik|RMSE|Std.Errors|FE",
@@ -437,7 +445,7 @@ modelsummary(
 # --- 10. Done ---------------------------------------------------------------
 
 cat("\nPipeline finished. Inspect:\n")
-cat("  log:     logs/explorations_staggered_did_demo_R_01_demo.log\n")
+cat("  log:     explorations/staggered_did_demo/logs/01_demo.log\n")
 cat("  figures: explorations/staggered_did_demo/output/figures/\n")
 cat("  tables:  explorations/staggered_did_demo/output/tables/\n")
 
